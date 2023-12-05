@@ -1,0 +1,16 @@
+import torch
+import torchvision.transforms as transforms
+import torch.nn.functional as F
+import cv2
+import PIL.Image
+import numpy as np
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+mean = torch.Tensor([0.485, 0.456, 0.406]).to(device)
+std = torch.Tensor([0.229, 0.224, 0.225]).to(device)
+
+def preprocess(image):
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    image = PIL.Image.fromarray(image)
+    image = transforms.functional.to_tensor(image).to(device)
+    image.sub_(mean[:, None, None]).div_(std[:, None, None])
+    return image[None, ...]
